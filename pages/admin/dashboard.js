@@ -37,7 +37,7 @@ import {
 import Header from "components/Headers/Header.js";
 
 export async function getServerSideProps() {
-  const query = await fetch('http://localhost:3000/api/customer/get');
+  const query = await fetch('http://localhost:3000/api/customer');
   const customers = await query.json();
   return {
     props: {

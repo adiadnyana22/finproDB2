@@ -1,5 +1,11 @@
 var routes = [
   {
+    path: "/customer",
+    name: "Customer",
+    icon: "ni ni-single-02 text-primary",
+    layout: "/admin",
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
