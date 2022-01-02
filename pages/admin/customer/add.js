@@ -19,20 +19,12 @@ import Admin from "layouts/Admin.js";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`http://localhost:3000/api/customer/${params.customerId}`)
-    const customer = await res.json()
-  
-    return { props: { customer } }
-}
-
-function CustomerDetail({ customer }) {
+function AddCustomer() {
   const router = useRouter();
-  const { customerId } = router.query;
-  const [name, setName] = useState(customer.customerName);
-  const [gender, setGender] = useState(customer.customerGender);
-  const [address, setAddress] = useState(customer.customerAddress);
-  const [phone, setPhone] = useState(customer.customerPhone);
+  const [name, setName] = useState('');
+  const [gender, setGender] = useState('Male');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -42,8 +34,8 @@ function CustomerDetail({ customer }) {
         customerAddress: address,
         customerPhone: phone
     }
-    const res = await fetch(`http://localhost:3000/api/customer/${customerId}`, {
-        method: 'PUT',
+    const res = await fetch(`http://localhost:3000/api/customer/`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -150,7 +142,7 @@ function CustomerDetail({ customer }) {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Edit Customer Data</h3>
+                    <h3 className="mb-0">Add Customer Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
@@ -257,7 +249,7 @@ function CustomerDetail({ customer }) {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Update Customer</Button>
+                        <Button className="bg-blue text-white">Add Customer</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -270,6 +262,6 @@ function CustomerDetail({ customer }) {
   );
 }
 
-CustomerDetail.layout = Admin;
+AddCustomer.layout = Admin;
 
-export default CustomerDetail;
+export default AddCustomer;

@@ -6,6 +6,30 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/employee",
+    name: "Employee",
+    icon: "ni ni-badge text-orange",
+    layout: "/admin",
+  },
+  {
+    path: "/payment",
+    name: "Payment Method",
+    icon: "ni ni-credit-card text-info",
+    layout: "/admin",
+  },
+  {
+    path: "/product",
+    name: "Product",
+    icon: "ni ni-tag text-yellow",
+    layout: "/admin",
+  },
+  {
+    path: "/outlet",
+    name: "Outlet",
+    icon: "ni ni-shop text-blue",
+    layout: "/admin",
+  },
+  {
     path: "/dashboard",
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",

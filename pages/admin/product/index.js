@@ -28,24 +28,24 @@ import Header from "components/Headers/Header.js";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
-    const query = await fetch('http://localhost:3000/api/customer');
-    const customers = await query.json();
+    const query = await fetch('http://localhost:3000/api/product');
+    const products = await query.json();
     return {
       props: {
-        customers
+        products
       },
     };
 }
 
-function Customer({ customers }) {
+function Product({ products }) {
   const router = useRouter();
 
   const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/customer/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/product/${id}`, {
         method: 'DELETE'
     })
     const data = await res.json();
-    router.push('/admin/customer');
+    router.push('/admin/product');
   }
 
   return (
@@ -60,15 +60,15 @@ function Customer({ customers }) {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Customer table</h3>
+                    <h3 className="mb-0">Product table</h3>
                   </div>
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      onClick={(e) => { router.push('/admin/customer/add') }}
+                      onClick={(e) => { router.push('/admin/product/add') }}
                       size="sm"
                     >
-                      Add Customer
+                      Add Product
                     </Button>
                   </div>
                 </Row>
@@ -76,21 +76,19 @@ function Customer({ customers }) {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Customer Name</th>
-                    <th scope="col">Customer Phone</th>
-                    <th scope="col">Customer Address</th>
-                    <th scope="col">Customer Gender</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Product Type</th>
+                    <th scope="col">Product Price</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer) => {
+                  {products.map((product) => {
                     return (
-                      <tr key={customer.id}>
-                        <th scope="row">{customer.customerName}</th>
-                        <td>{customer.customerPhone}</td>
-                        <td style={{ whiteSpace: 'normal'}}>{customer.customerAddress}</td>
-                        <td>{customer.customerGender}</td>
+                      <tr key={product.id}>
+                        <th scope="row">{product.productName}</th>
+                        <td>{product.productType}</td>
+                        <td>{product.productPrice}</td>
                         <td className="">
                           <UncontrolledDropdown>
                             <DropdownToggle
@@ -105,12 +103,12 @@ function Customer({ customers }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/customer/${customer.id}`) }}
+                                onClick={(e) => { router.push(`/admin/product/${product.id}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(customer.id) }}
+                                onClick={(e) => { deleteHandler(product.id) }}
                               >
                                 Delete
                               </DropdownItem>
@@ -182,6 +180,6 @@ function Customer({ customers }) {
   );
 }
 
-Customer.layout = Admin;
+Product.layout = Admin;
 
-export default Customer;
+export default Product;

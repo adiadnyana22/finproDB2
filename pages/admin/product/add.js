@@ -19,38 +19,28 @@ import Admin from "layouts/Admin.js";
 import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 
-export async function getServerSideProps({ params }) {
-    const res = await fetch(`http://localhost:3000/api/customer/${params.customerId}`)
-    const customer = await res.json()
-  
-    return { props: { customer } }
-}
-
-function CustomerDetail({ customer }) {
+function AddProduct() {
   const router = useRouter();
-  const { customerId } = router.query;
-  const [name, setName] = useState(customer.customerName);
-  const [gender, setGender] = useState(customer.customerGender);
-  const [address, setAddress] = useState(customer.customerAddress);
-  const [phone, setPhone] = useState(customer.customerPhone);
+  const [name, setName] = useState('');
+  const [type, setType] = useState('Minuman');
+  const [price, setPrice] = useState('');
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const list = {
-        customerName: name,
-        customerGender: gender,
-        customerAddress: address,
-        customerPhone: phone
+        productName: name,
+        productType: type,
+        productPrice: price,
     }
-    const res = await fetch(`http://localhost:3000/api/customer/${customerId}`, {
-        method: 'PUT',
+    const res = await fetch(`http://localhost:3000/api/product/`, {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/customer');
+    router.push('/admin/product');
   }
 
   return (
@@ -150,29 +140,29 @@ function CustomerDetail({ customer }) {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Edit Customer Data</h3>
+                    <h3 className="mb-0">Add Product Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={submitHandler}>
                   <h6 className="heading-small text-muted mb-4">
-                    User information
+                    Product information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="6">
+                      <Col lg="12">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-name"
                           >
-                            Name
+                            Product Name
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-name"
-                            placeholder="Name"
+                            placeholder="Product Name"
                             type="text"
                             name="name"
                             value={name}
@@ -181,72 +171,50 @@ function CustomerDetail({ customer }) {
                           />
                         </FormGroup>
                       </Col>
+                    </Row>
+                    <Row>
                       <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-gender"
+                            htmlFor="input-type"
                           >
-                            Gender
+                            Product Type
                           </label>
                           <Input
                             className="form-control-alternative"
-                            id="input-gender"
+                            id="input-type"
                             type="select"
-                            name="gender"
-                            value={gender}
-                            onChange={e => {setGender(e.target.value)}}
+                            name="type"
+                            value={type}
+                            onChange={e => {setType(e.target.value)}}
                             required
                           >
                             <option>
-                                Male
+                                Minuman
                             </option>
                             <option>
-                                Female
+                                Makanan
                             </option>
                           </Input>
                         </FormGroup>
                       </Col>
-                    </Row>
-                    <Row>
-                      <Col md="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-address"
+                            htmlFor="input-price"
                           >
-                            Address
+                            Product Price
                           </label>
                           <Input
                             className="form-control-alternative"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                            name="address"
-                            value={address}
-                            onChange={e => {setAddress(e.target.value)}}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-phone"
-                          >
-                            Phone Number
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-phone"
-                            placeholder="Phone Number"
-                            type="text"
-                            name="phone"
-                            value={phone}
-                            onChange={e => {setPhone(e.target.value)}}
+                            id="input-price"
+                            placeholder="Product Price"
+                            type="number"
+                            name="price"
+                            value={price}
+                            onChange={e => {setPrice(e.target.value)}}
                             required
                           />
                         </FormGroup>
@@ -257,7 +225,7 @@ function CustomerDetail({ customer }) {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Update Customer</Button>
+                        <Button className="bg-blue text-white">Add Product</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -270,6 +238,6 @@ function CustomerDetail({ customer }) {
   );
 }
 
-CustomerDetail.layout = Admin;
+AddProduct.layout = Admin;
 
-export default CustomerDetail;
+export default AddProduct;

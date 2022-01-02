@@ -3,37 +3,37 @@ import sqlConfig from '../../../variables/database';
 
 export default async (req, res) => {
     if(req.method === 'GET'){
-        const { customerId } = req.query;
-        let customers = [];
+        const { outletId } = req.query;
+        let outlets = [];
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            customers = await sql.query`SELECT * FROM Customer WHERE id=${customerId}`
+            outlets = await sql.query`SELECT * FROM Outlet WHERE id=${outletId}`
         } catch (err) {
             console.log(err)
         }
 
-        res.status(200).json(customers.recordset[0]);
+        res.status(200).json(outlets.recordset[0]);
     } else if(req.method === 'PUT'){
-        const { customerId } = req.query;
+        const { outletId } = req.query;
         const updateData = {...req.body};
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const customers = await sql.query`UPDATE Customer SET customerName=${updateData.customerName}, customerAddress=${updateData.customerAddress}, customerPhone=${updateData.customerPhone}, customerGender=${updateData.customerGender} WHERE id=${customerId}`
+            const outlets = await sql.query`UPDATE Outlet SET outletName=${updateData.outletName}, outletAddress=${updateData.outletAddress} WHERE id=${outletId}`
         } catch (err) {
             console.log(err)
         }
         res.status(200).json({ message: 'Update Success' });
     } else if(req.method === 'DELETE'){
-        const { customerId } = req.query;
+        const { outletId } = req.query;
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const customers = await sql.query`DELETE FROM Customer WHERE id=${customerId}`
+            const outlets = await sql.query`DELETE FROM Outlet WHERE id=${outletId}`
         } catch (err) {
             console.log(err)
         }

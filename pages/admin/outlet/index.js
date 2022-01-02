@@ -28,24 +28,24 @@ import Header from "components/Headers/Header.js";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
-    const query = await fetch('http://localhost:3000/api/customer');
-    const customers = await query.json();
+    const query = await fetch('http://localhost:3000/api/outlet');
+    const outlets = await query.json();
     return {
       props: {
-        customers
+        outlets
       },
     };
 }
 
-function Customer({ customers }) {
+function Outlet({ outlets }) {
   const router = useRouter();
 
   const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/customer/${id}`, {
+    const res = await fetch(`http://localhost:3000/api/outlet/${id}`, {
         method: 'DELETE'
     })
     const data = await res.json();
-    router.push('/admin/customer');
+    router.push('/admin/outlet');
   }
 
   return (
@@ -60,15 +60,15 @@ function Customer({ customers }) {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Customer table</h3>
+                    <h3 className="mb-0">Outlet table</h3>
                   </div>
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      onClick={(e) => { router.push('/admin/customer/add') }}
+                      onClick={(e) => { router.push('/admin/outlet/add') }}
                       size="sm"
                     >
-                      Add Customer
+                      Add Outlet
                     </Button>
                   </div>
                 </Row>
@@ -76,21 +76,17 @@ function Customer({ customers }) {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Customer Name</th>
-                    <th scope="col">Customer Phone</th>
-                    <th scope="col">Customer Address</th>
-                    <th scope="col">Customer Gender</th>
+                    <th scope="col">Outlet Name</th>
+                    <th scope="col">Outlet Address</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer) => {
+                  {outlets.map((outlet) => {
                     return (
-                      <tr key={customer.id}>
-                        <th scope="row">{customer.customerName}</th>
-                        <td>{customer.customerPhone}</td>
-                        <td style={{ whiteSpace: 'normal'}}>{customer.customerAddress}</td>
-                        <td>{customer.customerGender}</td>
+                      <tr key={outlet.id}>
+                        <th scope="row">{outlet.outletName}</th>
+                        <td style={{ whiteSpace: 'normal'}}>{outlet.outletAddress}</td>
                         <td className="">
                           <UncontrolledDropdown>
                             <DropdownToggle
@@ -105,12 +101,12 @@ function Customer({ customers }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/customer/${customer.id}`) }}
+                                onClick={(e) => { router.push(`/admin/outlet/${outlet.id}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(customer.id) }}
+                                onClick={(e) => { deleteHandler(outlet.id) }}
                               >
                                 Delete
                               </DropdownItem>
@@ -182,6 +178,6 @@ function Customer({ customers }) {
   );
 }
 
-Customer.layout = Admin;
+Outlet.layout = Admin;
 
-export default Customer;
+export default Outlet;

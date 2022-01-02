@@ -3,37 +3,37 @@ import sqlConfig from '../../../variables/database';
 
 export default async (req, res) => {
     if(req.method === 'GET'){
-        const { customerId } = req.query;
-        let customers = [];
+        const { employeeId } = req.query;
+        let employees = [];
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            customers = await sql.query`SELECT * FROM Customer WHERE id=${customerId}`
+            employees = await sql.query`SELECT * FROM Employee WHERE id=${employeeId}`
         } catch (err) {
             console.log(err)
         }
 
-        res.status(200).json(customers.recordset[0]);
+        res.status(200).json(employees.recordset[0]);
     } else if(req.method === 'PUT'){
-        const { customerId } = req.query;
+        const { employeeId } = req.query;
         const updateData = {...req.body};
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const customers = await sql.query`UPDATE Customer SET customerName=${updateData.customerName}, customerAddress=${updateData.customerAddress}, customerPhone=${updateData.customerPhone}, customerGender=${updateData.customerGender} WHERE id=${customerId}`
+            const employees = await sql.query`UPDATE Employee SET employeeName=${updateData.employeeName}, employeeAddress=${updateData.employeeAddress}, employeePhone=${updateData.employeePhone}, employeeGender=${updateData.employeeGender} WHERE id=${employeeId}`
         } catch (err) {
             console.log(err)
         }
         res.status(200).json({ message: 'Update Success' });
     } else if(req.method === 'DELETE'){
-        const { customerId } = req.query;
+        const { employeeId } = req.query;
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const customers = await sql.query`DELETE FROM Customer WHERE id=${customerId}`
+            const customers = await sql.query`DELETE FROM Employee WHERE id=${employeeId}`
         } catch (err) {
             console.log(err)
         }

@@ -3,24 +3,24 @@ import sqlConfig from '../../../variables/database';
 
 export default async (req, res) => {
     if(req.method === 'GET'){
-        let customers = [];
+        let employees = [];
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            customers = await sql.query`SELECT * FROM Customer`
+            employees = await sql.query`SELECT * FROM Employee`
         } catch (err) {
             console.log(err)
         }
 
-        res.status(200).json(customers.recordset);
+        res.status(200).json(employees.recordset);
     } else if(req.method === 'POST'){
         const newData = {...req.body};
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            await sql.query`INSERT INTO Customer(customerName, customerAddress, customerPhone, customerGender) VALUES (${newData.customerName}, ${newData.customerAddress}, ${newData.customerPhone}, ${newData.customerGender})`
+            await sql.query`INSERT INTO Employee(employeeName, employeeAddress, employeePhone, employeeGender) VALUES (${newData.employeeName}, ${newData.employeeAddress}, ${newData.employeePhone}, ${newData.employeeGender})`
         } catch (err) {
             console.log(err)
         }

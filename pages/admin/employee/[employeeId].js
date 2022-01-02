@@ -20,29 +20,29 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps({ params }) {
-    const res = await fetch(`http://localhost:3000/api/customer/${params.customerId}`)
-    const customer = await res.json()
+    const res = await fetch(`http://localhost:3000/api/employee/${params.employeeId}`)
+    const employee = await res.json()
   
-    return { props: { customer } }
+    return { props: { employee } }
 }
 
-function CustomerDetail({ customer }) {
+function EmployeeDetail({ employee }) {
   const router = useRouter();
-  const { customerId } = router.query;
-  const [name, setName] = useState(customer.customerName);
-  const [gender, setGender] = useState(customer.customerGender);
-  const [address, setAddress] = useState(customer.customerAddress);
-  const [phone, setPhone] = useState(customer.customerPhone);
+  const { employeeId } = router.query;
+  const [name, setName] = useState(employee.employeeName);
+  const [gender, setGender] = useState(employee.employeeGender);
+  const [address, setAddress] = useState(employee.employeeAddress);
+  const [phone, setPhone] = useState(employee.employeePhone);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const list = {
-        customerName: name,
-        customerGender: gender,
-        customerAddress: address,
-        customerPhone: phone
+        employeeName: name,
+        employeeGender: gender,
+        employeeAddress: address,
+        employeePhone: phone
     }
-    const res = await fetch(`http://localhost:3000/api/customer/${customerId}`, {
+    const res = await fetch(`http://localhost:3000/api/employee/${employeeId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ function CustomerDetail({ customer }) {
         body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/customer');
+    router.push('/admin/employee');
   }
 
   return (
@@ -150,7 +150,7 @@ function CustomerDetail({ customer }) {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Edit Customer Data</h3>
+                    <h3 className="mb-0">Edit Employee Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
@@ -257,7 +257,7 @@ function CustomerDetail({ customer }) {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Update Customer</Button>
+                        <Button className="bg-blue text-white">Update Employee</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -270,6 +270,6 @@ function CustomerDetail({ customer }) {
   );
 }
 
-CustomerDetail.layout = Admin;
+EmployeeDetail.layout = Admin;
 
-export default CustomerDetail;
+export default EmployeeDetail;
