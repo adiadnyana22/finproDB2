@@ -23,6 +23,6 @@ Template from https://github.com/creativetimofficial/nextjs-argon-dashboard
 ### Start Server
 - Go to terminal, and write :
     ```
-    npm start
+    npm run dev
     ```
 and done, you can open your browser at http://localhost:3000/
