@@ -9,7 +9,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            employees = await sql.query`SELECT * FROM Employee WHERE id=${employeeId}`
+            employees = await sql.query`SELECT * FROM Employee WHERE employeeID=${employeeId}`
         } catch (err) {
             console.log(err)
         }
@@ -22,7 +22,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const employees = await sql.query`UPDATE Employee SET employeeName=${updateData.employeeName}, employeeAddress=${updateData.employeeAddress}, employeePhone=${updateData.employeePhone}, employeeGender=${updateData.employeeGender} WHERE id=${employeeId}`
+            const employees = await sql.query`UPDATE Employee SET employeeName=${updateData.employeeName}, employeeAddress=${updateData.employeeAddress}, employeePhone=${updateData.employeePhone}, employeeGender=${updateData.employeeGender} WHERE employeeID=${employeeId}`
         } catch (err) {
             console.log(err)
         }
@@ -33,7 +33,11 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const customers = await sql.query`DELETE FROM Employee WHERE id=${employeeId}`
+            
+            const employees = await sql.query`SELECT accessID FROM Employee WHERE employeeID=${employeeId}`
+            const { accessID } = employees.recordset[0];
+            await sql.query`DELETE FROM Employee WHERE employeeID=${employeeId}`
+            await sql.query`DELETE FROM Access WHERE accessID=${accessID}`
         } catch (err) {
             console.log(err)
         }

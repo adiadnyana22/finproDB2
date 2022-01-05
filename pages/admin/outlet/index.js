@@ -40,8 +40,8 @@ export async function getServerSideProps() {
 function Outlet({ outlets }) {
   const router = useRouter();
 
-  const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/outlet/${id}`, {
+  const deleteHandler = async (outletID) => {
+    const res = await fetch(`http://localhost:3000/api/outlet/${outletID}`, {
         method: 'DELETE'
     })
     const data = await res.json();
@@ -84,7 +84,7 @@ function Outlet({ outlets }) {
                 <tbody>
                   {outlets.map((outlet) => {
                     return (
-                      <tr key={outlet.id}>
+                      <tr key={outlet.outletID}>
                         <th scope="row">{outlet.outletName}</th>
                         <td style={{ whiteSpace: 'normal'}}>{outlet.outletAddress}</td>
                         <td className="">
@@ -101,12 +101,12 @@ function Outlet({ outlets }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/outlet/${outlet.id}`) }}
+                                onClick={(e) => { router.push(`/admin/outlet/${outlet.outletID}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(outlet.id) }}
+                                onClick={(e) => { deleteHandler(outlet.outletID) }}
                               >
                                 Delete
                               </DropdownItem>

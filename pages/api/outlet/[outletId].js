@@ -9,7 +9,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            outlets = await sql.query`SELECT * FROM Outlet WHERE id=${outletId}`
+            outlets = await sql.query`SELECT * FROM Outlet WHERE outletID=${outletId}`
         } catch (err) {
             console.log(err)
         }
@@ -22,7 +22,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const outlets = await sql.query`UPDATE Outlet SET outletName=${updateData.outletName}, outletAddress=${updateData.outletAddress} WHERE id=${outletId}`
+            const outlets = await sql.query`UPDATE Outlet SET outletName=${updateData.outletName}, outletAddress=${updateData.outletAddress} WHERE outletID=${outletId}`
         } catch (err) {
             console.log(err)
         }
@@ -33,7 +33,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const outlets = await sql.query`DELETE FROM Outlet WHERE id=${outletId}`
+            const outlets = await sql.query`DELETE FROM Outlet WHERE outletID=${outletId}`
         } catch (err) {
             console.log(err)
         }

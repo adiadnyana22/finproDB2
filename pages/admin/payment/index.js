@@ -40,8 +40,8 @@ export async function getServerSideProps() {
 function Payment({ payments }) {
   const router = useRouter();
 
-  const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/payment/${id}`, {
+  const deleteHandler = async (paymentID) => {
+    const res = await fetch(`http://localhost:3000/api/payment/${paymentID}`, {
         method: 'DELETE'
     })
     const data = await res.json();
@@ -83,7 +83,7 @@ function Payment({ payments }) {
                 <tbody>
                   {payments.map((payment) => {
                     return (
-                      <tr key={payment.id}>
+                      <tr key={payment.paymentID}>
                         <th scope="row">{payment.paymentName}</th>
                         <td className="">
                           <UncontrolledDropdown>
@@ -99,12 +99,12 @@ function Payment({ payments }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/payment/${payment.id}`) }}
+                                onClick={(e) => { router.push(`/admin/payment/${payment.paymentID}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(payment.id) }}
+                                onClick={(e) => { deleteHandler(payment.paymentID) }}
                               >
                                 Delete
                               </DropdownItem>

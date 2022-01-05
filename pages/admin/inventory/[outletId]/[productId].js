@@ -18,25 +18,36 @@ import Admin from "layouts/Admin.js";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
-function AddPayment() {
+export async function getServerSideProps({ params }) {
+    const res = await fetch(`http://localhost:3000/api/inventory/${params.outletId}/${params.productId}`)
+    const product = await res.json()
+  
+    return { props: { product: product[0] } }
+}
+
+function InventoryDetail({ product }) {
   const router = useRouter();
-  const [name, setName] = useState('');
+  const outletID = Cookies.get('outletID');
+  const [quantity, setQuantity] = useState(product.quantity);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const list = {
-        paymentName: name
+        productID: product.productID,
+        outletID: outletID,
+        quantity: quantity
     }
-    const res = await fetch(`http://localhost:3000/api/payment`, {
-        method: 'POST',
+    const res = await fetch(`http://localhost:3000/api/inventory`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/payment');
+    router.push('/admin/inventory');
   }
 
   return (
@@ -136,33 +147,53 @@ function AddPayment() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Add Payment Method Data</h3>
+                    <h3 className="mb-0">Edit Inventory Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={submitHandler}>
                   <h6 className="heading-small text-muted mb-4">
-                    Payment method information
+                    Inventory information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-name"
                           >
-                            Payment Name
+                            Product Name
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-name"
-                            placeholder="Payment Name"
+                            placeholder="Product Name"
                             type="text"
                             name="name"
-                            value={name}
-                            onChange={e => {setName(e.target.value)}}
+                            value={product.productName}
+                            required
+                            disabled
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-quantity"
+                          >
+                            Product Quantity
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-quantity"
+                            placeholder="Product Quantity"
+                            type="number"
+                            name="quantity"
+                            value={quantity}
+                            onChange={e => {setQuantity(e.target.value)}}
                             required
                           />
                         </FormGroup>
@@ -173,7 +204,7 @@ function AddPayment() {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Add Payment Method</Button>
+                        <Button className="bg-blue text-white">Update Inventory</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -186,6 +217,6 @@ function AddPayment() {
   );
 }
 
-AddPayment.layout = Admin;
+InventoryDetail.layout = Admin;
 
-export default AddPayment;
+export default InventoryDetail;

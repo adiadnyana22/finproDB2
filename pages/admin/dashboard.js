@@ -175,7 +175,7 @@ const Dashboard = ({ customers }) => {
                 <tbody>
                   {customers.map((customer) => {
                     return (
-                      <tr key={customer.id}>
+                      <tr key={customer.customerID}>
                         <th scope="row">{customer.customerName}</th>
                         <td>{customer.customerPhone}</td>
                         <td>{customer.customerAddress}</td>

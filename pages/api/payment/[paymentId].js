@@ -9,7 +9,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            payments = await sql.query`SELECT * FROM PaymentMethod WHERE id=${paymentId}`
+            payments = await sql.query`SELECT * FROM PaymentMethod WHERE paymentID=${paymentId}`
         } catch (err) {
             console.log(err)
         }
@@ -22,7 +22,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const payments = await sql.query`UPDATE PaymentMethod SET paymentName=${updateData.paymentName} WHERE id=${paymentId}`
+            const payments = await sql.query`UPDATE PaymentMethod SET paymentName=${updateData.paymentName} WHERE paymentID=${paymentId}`
         } catch (err) {
             console.log(err)
         }
@@ -33,7 +33,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const payments = await sql.query`DELETE FROM PaymentMethod WHERE id=${paymentId}`
+            const payments = await sql.query`DELETE FROM PaymentMethod WHERE paymentID=${paymentId}`
         } catch (err) {
             console.log(err)
         }

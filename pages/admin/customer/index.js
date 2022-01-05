@@ -40,8 +40,8 @@ export async function getServerSideProps() {
 function Customer({ customers }) {
   const router = useRouter();
 
-  const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/customer/${id}`, {
+  const deleteHandler = async (customerID) => {
+    const res = await fetch(`http://localhost:3000/api/customer/${customerID}`, {
         method: 'DELETE'
     })
     const data = await res.json();
@@ -86,7 +86,7 @@ function Customer({ customers }) {
                 <tbody>
                   {customers.map((customer) => {
                     return (
-                      <tr key={customer.id}>
+                      <tr key={customer.customerID}>
                         <th scope="row">{customer.customerName}</th>
                         <td>{customer.customerPhone}</td>
                         <td style={{ whiteSpace: 'normal'}}>{customer.customerAddress}</td>
@@ -105,12 +105,12 @@ function Customer({ customers }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/customer/${customer.id}`) }}
+                                onClick={(e) => { router.push(`/admin/customer/${customer.customerID}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(customer.id) }}
+                                onClick={(e) => { deleteHandler(customer.customerID) }}
                               >
                                 Delete
                               </DropdownItem>

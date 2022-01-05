@@ -40,8 +40,8 @@ export async function getServerSideProps() {
 function Employee({ employees }) {
   const router = useRouter();
 
-  const deleteHandler = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/employee/${id}`, {
+  const deleteHandler = async (employeeID) => {
+    const res = await fetch(`http://localhost:3000/api/employee/${employeeID}`, {
         method: 'DELETE'
     })
     const data = await res.json();
@@ -86,7 +86,7 @@ function Employee({ employees }) {
                 <tbody>
                   {employees.map((employee) => {
                     return (
-                      <tr key={employee.id}>
+                      <tr key={employee.employeeID}>
                         <th scope="row">{employee.employeeName}</th>
                         <td>{employee.employeePhone}</td>
                         <td style={{ whiteSpace: 'normal'}}>{employee.employeeAddress}</td>
@@ -105,12 +105,12 @@ function Employee({ employees }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/employee/${employee.id}`) }}
+                                onClick={(e) => { router.push(`/admin/employee/${employee.employeeID}`) }}
                               >
                                 Update
                               </DropdownItem>
                               <DropdownItem
-                                onClick={(e) => { deleteHandler(employee.id) }}
+                                onClick={(e) => { deleteHandler(employee.employeeID) }}
                               >
                                 Delete
                               </DropdownItem>

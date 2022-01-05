@@ -18,6 +18,7 @@ import Admin from "layouts/Admin.js";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 function AddEmployee() {
   const router = useRouter();
@@ -25,16 +26,24 @@ function AddEmployee() {
   const [gender, setGender] = useState('Male');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Kasir');
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    const outletID = Cookies.get('outletID');
     const list = {
         employeeName: name,
         employeeGender: gender,
         employeeAddress: address,
-        employeePhone: phone
+        employeePhone: phone,
+        username: username,
+        password: password,
+        role: role,
+        outletID: outletID
     }
-    const res = await fetch(`http://localhost:3000/api/employee/`, {
+    const res = await fetch(`http://localhost:3000/api/employee`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -241,6 +250,82 @@ function AddEmployee() {
                             onChange={e => {setPhone(e.target.value)}}
                             required
                           />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                  </div>
+                  <hr className="my-4" />
+                  <h6 className="heading-small text-muted mb-4">
+                    Login information
+                  </h6>
+                  <div className="pl-lg-4">
+                    <Row>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-username"
+                          >
+                            Username
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-username"
+                            placeholder="Username"
+                            type="text"
+                            name="username"
+                            value={username}
+                            onChange={e => {setUsername(e.target.value)}}
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-password"
+                          >
+                            Password
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-password"
+                            placeholder="Password"
+                            type="password"
+                            name="password"
+                            value={password}
+                            onChange={e => {setPassword(e.target.value)}}
+                            required
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg="12">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-role"
+                          >
+                            Role
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-role"
+                            type="select"
+                            name="role"
+                            value={role}
+                            onChange={e => {setRole(e.target.value)}}
+                            required
+                          >
+                            <option>
+                                Kasir
+                            </option>
+                            <option>
+                                Teknisi
+                            </option>
+                          </Input>
                         </FormGroup>
                       </Col>
                     </Row>

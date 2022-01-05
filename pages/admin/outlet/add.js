@@ -30,7 +30,7 @@ function AddOutlet() {
       outletName: name,
       outletAddress: address
     }
-    const res = await fetch(`http://localhost:3000/api/outlet/`, {
+    const res = await fetch(`http://localhost:3000/api/outlet`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

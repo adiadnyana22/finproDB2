@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // reactstrap components
 import {
@@ -18,17 +18,37 @@ import Admin from "layouts/Admin.js";
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
-function AddPayment() {
+export async function getServerSideProps({ params }) {
+  const outletID = params.outletId;
+  const query = await fetch(`http://localhost:3000/api/inventory/getSelect/${outletID}`);
+  const products = await query.json();
+  return {
+    props: {
+      products
+    },
+  };
+}
+
+function AddInventory({ products }) {
   const router = useRouter();
-  const [name, setName] = useState('');
+  // Add effect no products
+  useEffect(() => {
+    if(products[0] === undefined) router.push('/admin/inventory');
+  }, [])
+  const outletID = Cookies.get('outletID');
+  const [name, setName] = useState(products[0] ? products[0].productID : 'No Product');
+  const [quantity, setQuantity] = useState('');
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const list = {
-        paymentName: name
+        productID: name,
+        outletID: outletID,
+        quantity: quantity
     }
-    const res = await fetch(`http://localhost:3000/api/payment`, {
+    const res = await fetch(`http://localhost:3000/api/inventory`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -36,7 +56,7 @@ function AddPayment() {
         body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/payment');
+    router.push('/admin/inventory');
   }
 
   return (
@@ -136,33 +156,60 @@ function AddPayment() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Add Payment Method Data</h3>
+                    <h3 className="mb-0">Add Inventory Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={submitHandler}>
                   <h6 className="heading-small text-muted mb-4">
-                    Payment method information
+                    Inventory information
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-name"
                           >
-                            Payment Name
+                            Product Name
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-name"
-                            placeholder="Payment Name"
-                            type="text"
+                            type="select"
                             name="name"
                             value={name}
                             onChange={e => {setName(e.target.value)}}
+                            required
+                          >
+                            { products.map((product) => {
+                              return (
+                                <option key={product.productID} value={product.productID}>
+                                  {product.productName}
+                                </option>
+                              )
+                            }) }
+                          </Input>
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-quantity"
+                          >
+                            Product Quantity
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-quantity"
+                            placeholder="Product Quantity"
+                            type="number"
+                            name="quantity"
+                            value={quantity}
+                            onChange={e => {setQuantity(e.target.value)}}
                             required
                           />
                         </FormGroup>
@@ -173,7 +220,7 @@ function AddPayment() {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Add Payment Method</Button>
+                        <Button className="bg-blue text-white">Add Inventory</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -186,6 +233,6 @@ function AddPayment() {
   );
 }
 
-AddPayment.layout = Admin;
+AddInventory.layout = Admin;
 
-export default AddPayment;
+export default AddInventory;

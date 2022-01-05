@@ -9,7 +9,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            products = await sql.query`SELECT * FROM Product WHERE id=${productId}`
+            products = await sql.query`SELECT * FROM Product WHERE productID=${productId}`
         } catch (err) {
             console.log(err)
         }
@@ -22,7 +22,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const products = await sql.query`UPDATE Product SET productName=${updateData.productName}, productType=${updateData.productType}, productPrice=${updateData.productPrice} WHERE id=${productId}`
+            const products = await sql.query`UPDATE Product SET productName=${updateData.productName}, productType=${updateData.productType}, productPrice=${updateData.productPrice} WHERE productID=${productId}`
         } catch (err) {
             console.log(err)
         }
@@ -33,7 +33,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            const products = await sql.query`DELETE FROM Product WHERE id=${productId}`
+            const products = await sql.query`DELETE FROM Product WHERE productID=${productId}`
         } catch (err) {
             console.log(err)
         }

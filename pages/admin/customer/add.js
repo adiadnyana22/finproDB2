@@ -34,7 +34,7 @@ function AddCustomer() {
         customerAddress: address,
         customerPhone: phone
     }
-    const res = await fetch(`http://localhost:3000/api/customer/`, {
+    const res = await fetch(`http://localhost:3000/api/customer`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

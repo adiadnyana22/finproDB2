@@ -17,8 +17,19 @@ import {
   Container,
   Media,
 } from "reactstrap";
+import Cookies from "js-cookie";
+import router from "next/router";
 
 function AdminNavbar({ brandText }) {
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    Cookies.remove('username');
+    Cookies.remove('outletID');
+    Cookies.remove('role');
+    if(Cookies.get('employee')) Cookies.remove('employeeID');
+    router.push('/auth/login');
+  }
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -86,7 +97,7 @@ function AdminNavbar({ brandText }) {
                   </DropdownItem>
                 </Link>
                 <DropdownItem divider /> */}
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem onClick={logoutHandler}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

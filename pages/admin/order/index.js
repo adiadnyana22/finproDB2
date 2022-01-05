@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 // reactstrap components
 import {
@@ -26,27 +26,14 @@ import Admin from "layouts/Admin.js";
 // core components
 import Header from "components/Headers/Header.js";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
-export async function getServerSideProps() {
-    const query = await fetch('http://localhost:3000/api/product');
-    const products = await query.json();
-    return {
-      props: {
-        products
-      },
-    };
-}
-
-function Product({ products }) {
+function OrderJump() {
   const router = useRouter();
-
-  const deleteHandler = async (productID) => {
-    const res = await fetch(`http://localhost:3000/api/product/${productID}`, {
-        method: 'DELETE'
-    })
-    const data = await res.json();
-    router.push('/admin/product');
-  }
+  const outletID = Cookies.get('outletID')
+  useEffect(() => {
+    router.push(`/admin/order/${outletID}`);
+  }, [])
 
   return (
     <>
@@ -60,15 +47,15 @@ function Product({ products }) {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Product table</h3>
+                    <h3 className="mb-0">Order table</h3>
                   </div>
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      onClick={(e) => { router.push('/admin/product/add') }}
+                      onClick={(e) => {  }}
                       size="sm"
                     >
-                      Add Product
+                      Add Order
                     </Button>
                   </div>
                 </Row>
@@ -76,48 +63,12 @@ function Product({ products }) {
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Product Type</th>
-                    <th scope="col">Product Price</th>
+                    <th scope="col">OrderID</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => {
-                    return (
-                      <tr key={product.productID}>
-                        <th scope="row">{product.productName}</th>
-                        <td>{product.productType}</td>
-                        <td>{product.productPrice}</td>
-                        <td className="">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              <DropdownItem
-                                onClick={(e) => { router.push(`/admin/product/${product.productID}`) }}
-                              >
-                                Update
-                              </DropdownItem>
-                              <DropdownItem
-                                onClick={(e) => { deleteHandler(product.productID) }}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                  
                 </tbody>
               </Table>
               {/* <CardFooter className="py-4">
@@ -180,6 +131,6 @@ function Product({ products }) {
   );
 }
 
-Product.layout = Admin;
+OrderJump.layout = Admin;
 
-export default Product;
+export default OrderJump;
