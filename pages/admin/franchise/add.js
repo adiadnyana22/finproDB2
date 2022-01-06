@@ -20,30 +20,22 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-function AddEmployee() {
+function AddFranchise() {
   const router = useRouter();
   const [name, setName] = useState('');
-  const [gender, setGender] = useState('Male');
   const [address, setAddress] = useState('');
-  const [phone, setPhone] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('Kasir');
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const outletID = Cookies.get('outletID');
     const list = {
-        employeeName: name,
-        employeeGender: gender,
-        employeeAddress: address,
-        employeePhone: phone,
-        username: username,
-        password: password,
-        role: role,
-        outletID: outletID
+        outletName: name,
+        outletAddress: address,
+        username,
+        password
     }
-    const res = await fetch(`http://localhost:3000/api/employee`, {
+    const res = await fetch(`http://localhost:3000/api/franchise`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -51,7 +43,7 @@ function AddEmployee() {
         body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/employee');
+    router.push('/admin/franchise');
   }
 
   return (
@@ -151,81 +143,33 @@ function AddEmployee() {
               <CardHeader className="bg-white border-0">
                 <Row className="align-items-center">
                   <Col xs="8">
-                    <h3 className="mb-0">Add Employee Data</h3>
+                    <h3 className="mb-0">Add Franchise Data</h3>
                   </Col>
                 </Row>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={submitHandler}>
                   <h6 className="heading-small text-muted mb-4">
-                    User information
+                    Outlet information
                   </h6>
                   <div className="pl-lg-4">
-                    <Row>
-                      <Col lg="6">
+                  <Row>
+                      <Col lg="12">
                         <FormGroup>
                           <label
                             className="form-control-label"
                             htmlFor="input-name"
                           >
-                            Name
+                            Outlet Name
                           </label>
                           <Input
                             className="form-control-alternative"
                             id="input-name"
-                            placeholder="Name"
+                            placeholder="Outlet Name"
                             type="text"
                             name="name"
                             value={name}
                             onChange={e => {setName(e.target.value)}}
-                            required
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col lg="6">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-gender"
-                          >
-                            Gender
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-gender"
-                            type="select"
-                            name="gender"
-                            value={gender}
-                            onChange={e => {setGender(e.target.value)}}
-                            required
-                          >
-                            <option>
-                                Male
-                            </option>
-                            <option>
-                                Female
-                            </option>
-                          </Input>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label
-                            className="form-control-label"
-                            htmlFor="input-address"
-                          >
-                            Address
-                          </label>
-                          <Input
-                            className="form-control-alternative"
-                            id="input-address"
-                            placeholder="Home Address"
-                            type="text"
-                            name="address"
-                            value={address}
-                            onChange={e => {setAddress(e.target.value)}}
                             required
                           />
                         </FormGroup>
@@ -236,18 +180,18 @@ function AddEmployee() {
                         <FormGroup>
                           <label
                             className="form-control-label"
-                            htmlFor="input-phone"
+                            htmlFor="input-address"
                           >
-                            Phone Number
+                            Outlet Address
                           </label>
                           <Input
                             className="form-control-alternative"
-                            id="input-phone"
-                            placeholder="Phone Number"
+                            id="input-address"
+                            placeholder="Outlet Address"
                             type="text"
-                            name="phone"
-                            value={phone}
-                            onChange={e => {setPhone(e.target.value)}}
+                            name="address"
+                            value={address}
+                            onChange={e => {setAddress(e.target.value)}}
                             required
                           />
                         </FormGroup>
@@ -313,19 +257,12 @@ function AddEmployee() {
                           <Input
                             className="form-control-alternative"
                             id="input-role"
-                            type="select"
+                            type="text"
                             name="role"
-                            value={role}
-                            onChange={e => {setRole(e.target.value)}}
+                            value="Pemilik Franchise"
                             required
-                          >
-                            <option>
-                                Kasir
-                            </option>
-                            <option>
-                                Inventaris
-                            </option>
-                          </Input>
+                            disabled
+                          />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -334,7 +271,7 @@ function AddEmployee() {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Add Employee</Button>
+                        <Button className="bg-blue text-white">Add Franchise</Button>
                       </Col>
                     </Row>
                 </Form>
@@ -347,6 +284,6 @@ function AddEmployee() {
   );
 }
 
-AddEmployee.layout = Admin;
+AddFranchise.layout = Admin;
 
-export default AddEmployee;
+export default AddFranchise;

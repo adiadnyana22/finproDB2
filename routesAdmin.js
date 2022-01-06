@@ -1,16 +1,16 @@
 var routes = [
-  {
-    path: "/customer",
-    name: "Customer",
-    icon: "ni ni-single-02 text-primary",
-    layout: "/admin",
-  },
-  {
-    path: "/employee",
-    name: "Employee",
-    icon: "ni ni-badge text-orange",
-    layout: "/admin",
-  },
+  // {
+  //   path: "/customer",
+  //   name: "Customer",
+  //   icon: "ni ni-single-02 text-primary",
+  //   layout: "/admin",
+  // },
+  // {
+  //   path: "/employee",
+  //   name: "Employee",
+  //   icon: "ni ni-badge text-orange",
+  //   layout: "/admin",
+  // },
   {
     path: "/payment",
     name: "Payment Method",
@@ -29,24 +29,24 @@ var routes = [
     icon: "ni ni-shop text-blue",
     layout: "/admin",
   },
-  {
-    path: "/inventory",
-    name: "Inventory",
-    icon: "ni ni-delivery-fast text-pink",
-    layout: "/admin",
-  },
+  // {
+  //   path: "/inventory",
+  //   name: "Inventory",
+  //   icon: "ni ni-delivery-fast text-pink",
+  //   layout: "/admin",
+  // },
   {
     path: "/franchise",
     name: "Franchise",
     icon: "ni ni-building text-danger",
     layout: "/admin",
   },
-  {
-    path: "/order",
-    name: "Order",
-    icon: "ni ni-cart text-primary",
-    layout: "/admin",
-  },
+  // {
+  //   path: "/order",
+  //   name: "Order",
+  //   icon: "ni ni-cart text-primary",
+  //   layout: "/admin",
+  // },
   // {
   //   path: "/dashboard",
   //   name: "Dashboard",

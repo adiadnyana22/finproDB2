@@ -22,11 +22,13 @@ import { useRouter } from "next/router";
 function AddPayment() {
   const router = useRouter();
   const [name, setName] = useState('');
+  const [category, setCategory] = useState('Digital Wallet');
 
   const submitHandler = async (e) => {
     e.preventDefault();
     const list = {
-        paymentName: name
+        paymentName: name,
+        paymentCategory: category
     }
     const res = await fetch(`http://localhost:3000/api/payment`, {
         method: 'POST',
@@ -147,7 +149,7 @@ function AddPayment() {
                   </h6>
                   <div className="pl-lg-4">
                     <Row>
-                      <Col lg="12">
+                      <Col lg="6">
                         <FormGroup>
                           <label
                             className="form-control-label"
@@ -165,6 +167,36 @@ function AddPayment() {
                             onChange={e => {setName(e.target.value)}}
                             required
                           />
+                        </FormGroup>
+                      </Col>
+                      <Col lg="6">
+                        <FormGroup>
+                          <label
+                            className="form-control-label"
+                            htmlFor="input-category"
+                          >
+                            Payment Category
+                          </label>
+                          <Input
+                            className="form-control-alternative"
+                            id="input-category"
+                            placeholder="Payment Category"
+                            type="select"
+                            name="category"
+                            value={category}
+                            onChange={e => {setCategory(e.target.value)}}
+                            required
+                          >
+                            <option>
+                              Digital Wallet
+                            </option>
+                            <option>
+                              Bank Account
+                            </option>
+                            <option>
+                              Cash
+                            </option>
+                          </Input>
                         </FormGroup>
                       </Col>
                     </Row>

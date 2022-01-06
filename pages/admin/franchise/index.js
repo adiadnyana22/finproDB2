@@ -28,24 +28,33 @@ import Header from "components/Headers/Header.js";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
-    const query = await fetch('http://localhost:3000/api/outlet');
-    const outlets = await query.json();
+    const query = await fetch('http://localhost:3000/api/franchise');
+    const franchises = await query.json();
     return {
       props: {
-        outlets
+        franchises
       },
     };
 }
 
-function Outlet({ outlets }) {
+function Franchise({ franchises }) {
   const router = useRouter();
 
-  const deleteHandler = async (outletID) => {
-    const res = await fetch(`http://localhost:3000/api/outlet/${outletID}`, {
-        method: 'DELETE'
+  const deleteHandler = async (accessID, outletID) => {
+    const list = {
+      accessID,
+      outletID
+    }
+
+    const res = await fetch(`http://localhost:3000/api/franchise`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(list)
     })
     const data = await res.json();
-    router.push('/admin/outlet');
+    router.push('/admin/franchise');
   }
 
   return (
@@ -60,33 +69,35 @@ function Outlet({ outlets }) {
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Outlet table</h3>
+                    <h3 className="mb-0">Franchise table</h3>
                   </div>
-                  {/* <div className="col text-right">
+                  <div className="col text-right">
                     <Button
                       color="primary"
-                      onClick={(e) => { router.push('/admin/outlet/add') }}
+                      onClick={(e) => { router.push('/admin/franchise/add') }}
                       size="sm"
                     >
-                      Add Outlet
+                      Add Franchise
                     </Button>
-                  </div> */}
+                  </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Outlet Name</th>
-                    <th scope="col">Outlet Address</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {outlets.map((outlet) => {
+                  {franchises.map((franchise) => {
                     return (
-                      <tr key={outlet.outletID}>
-                        <th scope="row">{outlet.outletName}</th>
-                        <td style={{ whiteSpace: 'normal'}}>{outlet.outletAddress}</td>
+                      <tr key={franchise.accessID}>
+                        <th scope="row">{franchise.username}</th>
+                        <td>{franchise.role}</td>
+                        <td>{franchise.outletName}</td>
                         <td className="">
                           <UncontrolledDropdown>
                             <DropdownToggle
@@ -101,15 +112,10 @@ function Outlet({ outlets }) {
                             </DropdownToggle>
                             <DropdownMenu className="dropdown-menu-arrow" right>
                               <DropdownItem
-                                onClick={(e) => { router.push(`/admin/outlet/${outlet.outletID}`) }}
-                              >
-                                Update
-                              </DropdownItem>
-                              {/* <DropdownItem
-                                onClick={(e) => { deleteHandler(outlet.outletID) }}
+                                onClick={(e) => { deleteHandler(franchise.accessID, franchise.outletID) }}
                               >
                                 Delete
-                              </DropdownItem> */}
+                              </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>
                         </td>
@@ -178,6 +184,6 @@ function Outlet({ outlets }) {
   );
 }
 
-Outlet.layout = Admin;
+Franchise.layout = Admin;
 
-export default Outlet;
+export default Franchise;

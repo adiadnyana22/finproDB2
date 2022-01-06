@@ -7,10 +7,24 @@ import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
-import routes from "routes.js";
+import routesAdmin from "../routesAdmin";
+import routesFranchise from "../routesFranchise";
+import routesBisnis from "../routesBisnis";
+import routesKasir from "../routesKasir";
+import routesInventaris from "../routesInventaris";
+import routesAll from "../routes";
+import Cookies from "js-cookie";
 
 function Admin(props) {
   // used for checking current route
+  const role = Cookies.get('role');
+  let routes;
+  if(role === 'Kasir') routes = routesKasir;
+  else if(role === 'Inventaris') routes = routesInventaris;
+  else if(role === 'Admin') routes = routesAdmin;
+  else if(role === 'Pemilik Franchise') routes = routesFranchise;
+  else if(role === 'Pemilik Bisnis') routes = routesBisnis;
+  else routes = routesAll;
   const router = useRouter();
   let mainContentRef = React.createRef();
   React.useEffect(() => {

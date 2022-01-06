@@ -77,6 +77,7 @@ function Payment({ payments }) {
                 <thead className="thead-light">
                   <tr>
                     <th scope="col">Payment Name</th>
+                    <th scope="col">Payment Category</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -85,6 +86,7 @@ function Payment({ payments }) {
                     return (
                       <tr key={payment.paymentID}>
                         <th scope="row">{payment.paymentName}</th>
+                        <td>{payment.paymentCategory}</td>
                         <td className="">
                           <UncontrolledDropdown>
                             <DropdownToggle

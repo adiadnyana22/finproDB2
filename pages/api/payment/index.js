@@ -20,7 +20,7 @@ export default async (req, res) => {
         try {
             // make sure that any items are correctly URL encoded in the connection string
             await sql.connect(sqlConfig)
-            await sql.query`INSERT INTO PaymentMethod(paymentName) VALUES (${newData.paymentName})`
+            await sql.query`INSERT INTO PaymentMethod(paymentName, paymentCategory) VALUES (${newData.paymentName}, ${newData.paymentCategory})`
         } catch (err) {
             console.log(err)
         }

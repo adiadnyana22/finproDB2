@@ -48,7 +48,13 @@ function Login() {
       Cookies.set('username', data.username)
       Cookies.set('role', data.role)
       if(data.employeeID) Cookies.set('employeeID', data.employeeID)
-      router.push('/admin/order');
+
+      const role = data.role;
+      if(role === 'Kasir') router.push('/admin/order');
+      else if(role === 'Inventaris') router.push('/admin/inventory');
+      else if(role === 'Admin') router.push('/admin/franchise');
+      else if(role === 'Pemilik Franchise') router.push('/admin/dashboard');
+      else if(role === 'Pemilik Bisnis') router.push('/admin/dashboard');
     }
   }
 
