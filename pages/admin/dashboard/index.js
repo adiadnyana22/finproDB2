@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // node.js library that concatenates classes (strings)
 import classnames from "classnames";
 // javascipt plugin for creating charts
@@ -34,21 +34,61 @@ import {
   chartExample2,
 } from "variables/charts.js";
 
-import Header from "components/Headers/Header.js";
+import DashboardHeader from "components/Headers/DashboardHeader.js";
+import Cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps() {
-  const query = await fetch('http://localhost:3000/api/customer');
-  const customers = await query.json();
+  const res = await fetch(`http://localhost:3000/api/dashboard`)
+  const dashboard = await res.json()
+
   return {
     props: {
-      customers
+      dashboard
     },
   };
 }
 
-const Dashboard = ({ customers }) => {
+const Dashboard = ({ dashboard }) => {
+  const router = useRouter();
+  const outletID = Cookies.get('outletID');
   const [activeNav, setActiveNav] = React.useState(1);
   const [chartExample1Data, setChartExample1Data] = React.useState("data1");
+  const [chartData, setChartData] = useState({});
+
+  useEffect(() => {
+    if(outletID === 'null') router.push(`/admin/dashboard`);
+    else router.push(`/admin/dashboard/${outletID}`);
+  }, [])
+
+  useEffect(() => {
+    const chartD = dashboard.orderDetail.reduce((prevVal, curEl) => {
+      const date = new Date(curEl.orderDate);
+      const month = date.getMonth();
+      if(month < 3) prevVal.order[0]++;
+      else if(month < 6) prevVal.order[1]++;
+      else if(month < 9) prevVal.order[2]++;
+      else prevVal.order[3]++;
+      prevVal.sales[month] += curEl.totalPrice / 1000;
+
+      return prevVal;
+    }, { sales: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], order: [0, 0, 0, 0] })
+    setChartData(chartD);
+  }, [])
+
+  const chartHandler = () => {
+    const dataChart = chartExample1[chartExample1Data]();
+    dataChart.datasets[0].data = chartData.sales;
+
+    return dataChart;
+  }
+
+  const chartHandler2 = () => {
+    const dataChart = chartExample2.data;
+    dataChart.datasets[0].data = chartData.order;
+
+    return dataChart;
+  }
 
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
@@ -61,7 +101,7 @@ const Dashboard = ({ customers }) => {
   };
   return (
     <>
-      <Header />
+      <DashboardHeader dashboard={dashboard} />
       {/* Page content */}
       <Container className="mt--7" fluid>
         <Row>
@@ -73,7 +113,7 @@ const Dashboard = ({ customers }) => {
                     <h6 className="text-uppercase text-light ls-1 mb-1">
                       Overview
                     </h6>
-                    <h2 className="text-white mb-0">Sales value</h2>
+                    <h2 className="mb-0">Sales value</h2>
                   </div>
                   <div className="col">
                     <Nav className="justify-content-end" pills>
@@ -89,19 +129,6 @@ const Dashboard = ({ customers }) => {
                           <span className="d-md-none">M</span>
                         </NavLink>
                       </NavItem>
-                      <NavItem>
-                        <NavLink
-                          className={classnames("py-2 px-3", {
-                            active: activeNav === 2,
-                          })}
-                          data-toggle="tab"
-                          href="#pablo"
-                          onClick={(e) => toggleNavs(e, 2)}
-                        >
-                          <span className="d-none d-md-block">Week</span>
-                          <span className="d-md-none">W</span>
-                        </NavLink>
-                      </NavItem>
                     </Nav>
                   </div>
                 </Row>
@@ -110,7 +137,7 @@ const Dashboard = ({ customers }) => {
                 {/* Chart */}
                 <div className="chart">
                   <Line
-                    data={chartExample1[chartExample1Data]}
+                    data={chartHandler}
                     options={chartExample1.options}
                     getDatasetAtEvent={(e) => console.log(e)}
                   />
@@ -134,7 +161,7 @@ const Dashboard = ({ customers }) => {
                 {/* Chart */}
                 <div className="chart">
                   <Bar
-                    data={chartExample2.data}
+                    data={chartHandler2()}
                     options={chartExample2.options}
                   />
                 </div>
@@ -142,7 +169,7 @@ const Dashboard = ({ customers }) => {
             </Card>
           </Col>
         </Row>
-        <Row className="mt-5">
+        {/* <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="12">
             <Card className="shadow">
               <CardHeader className="border-0">
@@ -215,7 +242,7 @@ const Dashboard = ({ customers }) => {
               </Table>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
       </Container>
     </>
   );

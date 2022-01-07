@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // reactstrap components
 import {
@@ -26,14 +26,28 @@ import Admin from "layouts/Admin.js";
 // core components
 import Header from "components/Headers/Header.js";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 
-function Employee() {
+export async function getServerSideProps({ params }) {
+    const { outletId } = params;
+    const query = await fetch(`http://localhost:3000/api/employee/getEmployee/${outletId}`);
+    const employees = await query.json();
+    return {
+      props: {
+        employees
+      },
+    };
+}
+
+function Employee({ employees }) {
   const router = useRouter();
-  const outletID = Cookies.get('outletID')
-  useEffect(() => {
-    router.push(`/admin/employee/${outletID}`);
-  }, [])
+
+  const deleteHandler = async (employeeID) => {
+    const res = await fetch(`http://localhost:3000/api/employee/${employeeID}`, {
+        method: 'DELETE'
+    })
+    const data = await res.json();
+    router.push('/admin/employee');
+  }
 
   return (
     <>
@@ -52,7 +66,7 @@ function Employee() {
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      // onClick={(e) => { router.push('/admin/employee/add') }}
+                      onClick={(e) => { router.push('/admin/employee/add') }}
                       size="sm"
                     >
                       Add Employee
@@ -71,7 +85,42 @@ function Employee() {
                   </tr>
                 </thead>
                 <tbody>
-                  
+                  {employees.map((employee) => {
+                    return (
+                      <tr key={employee.employeeID}>
+                        <th scope="row">{employee.employeeName}</th>
+                        <td>{employee.employeePhone}</td>
+                        <td style={{ whiteSpace: 'normal'}}>{employee.employeeAddress}</td>
+                        <td>{employee.employeeGender}</td>
+                        <td className="">
+                          <UncontrolledDropdown>
+                            <DropdownToggle
+                              className="btn-icon-only text-light"
+                              href="#pablo"
+                              role="button"
+                              size="sm"
+                              color=""
+                              onClick={(e) => e.preventDefault()}
+                            >
+                              <i className="fas fa-ellipsis-v" />
+                            </DropdownToggle>
+                            <DropdownMenu className="dropdown-menu-arrow" right>
+                              <DropdownItem
+                                onClick={(e) => { router.push(`/admin/employee/${employee.employeeID}`) }}
+                              >
+                                Update
+                              </DropdownItem>
+                              <DropdownItem
+                                onClick={(e) => { deleteHandler(employee.employeeID) }}
+                              >
+                                Delete
+                              </DropdownItem>
+                            </DropdownMenu>
+                          </UncontrolledDropdown>
+                        </td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </Table>
               {/* <CardFooter className="py-4">

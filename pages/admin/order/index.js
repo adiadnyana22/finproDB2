@@ -32,7 +32,7 @@ function OrderJump() {
   const router = useRouter();
   const outletID = Cookies.get('outletID')
   useEffect(() => {
-    router.push(`/admin/order/${outletID}`);
+    if(outletID) router.push(`/admin/order/${outletID}`);
   }, [])
 
   return (

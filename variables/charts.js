@@ -327,7 +327,7 @@ let chartExample1 = {
           ticks: {
             callback: function (value) {
               if (!(value % 10)) {
-                return "$" + value + "k";
+                return "Rp. " + value + "k";
               }
             },
           },
@@ -345,7 +345,7 @@ let chartExample1 = {
             content += label;
           }
 
-          content += "$" + yLabel + "k";
+          content += "Rp. " + yLabel + "k";
           return content;
         },
       },
@@ -353,11 +353,11 @@ let chartExample1 = {
   },
   data1: (canvas) => {
     return {
-      labels: ["May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+      labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       datasets: [
         {
           label: "Performance",
-          data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
+          data: [0, 20, 10, 30, 15, 40, 20, 60, 60, 20, 60, 60],
         },
       ],
     };
@@ -368,7 +368,7 @@ let chartExample1 = {
       datasets: [
         {
           label: "Performance",
-          data: [0, 20, 5, 25, 10, 30, 15, 40, 40],
+          data: [10, 120, 15, 125, 110, 130, 115, 140, 140],
         },
       ],
     };
@@ -383,7 +383,7 @@ let chartExample2 = {
         {
           ticks: {
             callback: function (value) {
-              if (!(value % 10)) {
+              if (!(value % 1)) {
                 //return '$' + value + 'k'
                 return value;
               }
@@ -408,12 +408,12 @@ let chartExample2 = {
     },
   },
   data: {
-    labels: ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: ["Q1", "Q2", "Q3", "Q4"],
     datasets: [
       {
         label: "Sales",
-        data: [25, 20, 30, 22, 17, 29],
-        maxBarThickness: 10,
+        data: [25, 20, 30, 40],
+        maxBarThickness: 25,
       },
     ],
   },

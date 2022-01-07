@@ -48,6 +48,7 @@ function Login() {
       Cookies.set('username', data.username)
       Cookies.set('role', data.role)
       if(data.employeeID) Cookies.set('employeeID', data.employeeID)
+      if(data.employeeGender) Cookies.set('employeeGender', data.employeeGender)
 
       const role = data.role;
       if(role === 'Kasir') router.push('/admin/order');

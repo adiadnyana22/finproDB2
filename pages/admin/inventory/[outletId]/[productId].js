@@ -191,6 +191,7 @@ function InventoryDetail({ product }) {
                             id="input-quantity"
                             placeholder="Product Quantity"
                             type="number"
+                            min={0}
                             name="quantity"
                             value={quantity}
                             onChange={e => {setQuantity(e.target.value)}}

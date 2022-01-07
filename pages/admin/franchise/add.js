@@ -12,6 +12,7 @@ import {
   Container,
   Row,
   Col,
+  FormFeedback
 } from "reactstrap";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -20,12 +21,32 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-function AddFranchise() {
+export async function getServerSideProps() {
+  const query = await fetch(`http://localhost:3000/api/access`);
+  const access = await query.json();
+  return {
+    props: {
+      access
+    },
+  };
+}
+
+function AddFranchise({ access }) {
   const router = useRouter();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [feedback, setFeedback] = useState(false);
+
+  const changeUsername = (username) => {
+    const availableUsername = access.find((element) => {
+      return element.username === username;
+    });
+    if(availableUsername !== undefined) setFeedback(true);
+    else setFeedback(false);
+    setUsername(username);
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -219,9 +240,13 @@ function AddFranchise() {
                             type="text"
                             name="username"
                             value={username}
-                            onChange={e => {setUsername(e.target.value)}}
+                            onChange={e => {changeUsername(e.target.value)}}
                             required
+                            invalid={feedback}
                           />
+                          <FormFeedback>
+                            Oh noes! that username is already taken
+                          </FormFeedback>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -271,7 +296,7 @@ function AddFranchise() {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Add Franchise</Button>
+                        <Button className="bg-blue text-white" disabled={feedback}>Add Franchise</Button>
                       </Col>
                     </Row>
                 </Form>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 // reactstrap components
 import { Container } from "reactstrap";
@@ -17,15 +17,17 @@ import Cookies from "js-cookie";
 
 function Admin(props) {
   // used for checking current route
-  const role = Cookies.get('role');
-  let routes;
-  if(role === 'Kasir') routes = routesKasir;
-  else if(role === 'Inventaris') routes = routesInventaris;
-  else if(role === 'Admin') routes = routesAdmin;
-  else if(role === 'Pemilik Franchise') routes = routesFranchise;
-  else if(role === 'Pemilik Bisnis') routes = routesBisnis;
-  else routes = routesAll;
   const router = useRouter();
+  const role = Cookies.get('role');
+  const [routes, setRoutes] = useState(routesAll)
+  useEffect(() => {
+    if(!role) router.push('/auth/login');
+    if(role === 'Kasir') setRoutes(routesKasir);
+    else if(role === 'Inventaris') setRoutes(routesInventaris);
+    else if(role === 'Admin') setRoutes(routesAdmin);
+    else if(role === 'Pemilik Franchise') setRoutes(routesFranchise);
+    else if(role === 'Pemilik Bisnis') setRoutes(routesBisnis);
+  }, [role, routes])
   let mainContentRef = React.createRef();
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;

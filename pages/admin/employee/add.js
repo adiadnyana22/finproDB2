@@ -12,6 +12,7 @@ import {
   Container,
   Row,
   Col,
+  FormFeedback
 } from "reactstrap";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -20,7 +21,17 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-function AddEmployee() {
+export async function getServerSideProps() {
+  const query = await fetch(`http://localhost:3000/api/access`);
+  const access = await query.json();
+  return {
+    props: {
+      access
+    },
+  };
+}
+
+function AddEmployee({ access }) {
   const router = useRouter();
   const [name, setName] = useState('');
   const [gender, setGender] = useState('Male');
@@ -29,6 +40,16 @@ function AddEmployee() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Kasir');
+  const [feedback, setFeedback] = useState(false);
+
+  const changeUsername = (username) => {
+    const availableUsername = access.find((element) => {
+      return element.username === username;
+    });
+    if(availableUsername !== undefined) setFeedback(true);
+    else setFeedback(false);
+    setUsername(username);
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -275,9 +296,13 @@ function AddEmployee() {
                             type="text"
                             name="username"
                             value={username}
-                            onChange={e => {setUsername(e.target.value)}}
+                            onChange={e => {changeUsername(e.target.value)}}
                             required
+                            invalid={feedback}
                           />
+                          <FormFeedback>
+                            Oh noes! that username is already taken
+                          </FormFeedback>
                         </FormGroup>
                       </Col>
                       <Col lg="6">
@@ -334,7 +359,7 @@ function AddEmployee() {
                   {/* Button */}
                   <Row>
                       <Col className="text-right">
-                        <Button className="bg-blue text-white">Add Employee</Button>
+                        <Button className="bg-blue text-white" disabled={feedback}>Add Employee</Button>
                       </Col>
                     </Row>
                 </Form>

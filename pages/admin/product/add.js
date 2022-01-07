@@ -212,6 +212,7 @@ function AddProduct() {
                             id="input-price"
                             placeholder="Product Price"
                             type="number"
+                            min={0}
                             name="price"
                             value={price}
                             onChange={e => {setPrice(e.target.value)}}

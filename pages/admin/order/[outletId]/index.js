@@ -60,7 +60,7 @@ function Order({ orders }) {
                   <div className="col text-right">
                     <Button
                       color="primary"
-                      onClick={(e) => { router.push(`/admin/order/add`) }}
+                      onClick={(e) => { router.push(`/admin/order/${outletID}/add`) }}
                       size="sm"
                     >
                       Add Order

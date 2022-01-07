@@ -51,7 +51,7 @@ function Auth(props) {
           </div>
         </div> */}
         {/* Page content */}
-        <Container className="mt-7 pb-7">
+        <Container className="pt-7 pb-7">
           <Row className="justify-content-center">{props.children}</Row>
         </Container>
       </div>

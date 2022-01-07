@@ -6,6 +6,12 @@ var routes = [
   //   layout: "/admin",
   // },
   {
+    path: "/dashboard",
+    name: "Dashboard",
+    icon: "ni ni-tv-2 text-primary",
+    layout: "/admin",
+  },
+  {
     path: "/employee",
     name: "Employee",
     icon: "ni ni-badge text-orange",
@@ -47,12 +53,7 @@ var routes = [
   //   icon: "ni ni-cart text-primary",
   //   layout: "/admin",
   // },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "ni ni-tv-2 text-primary",
-    layout: "/admin",
-  },
+  
   // {
   //   path: "/icons",
   //   name: "Icons",

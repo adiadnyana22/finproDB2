@@ -32,7 +32,7 @@ function InventoryJump() {
   const router = useRouter();
   const outletID = Cookies.get('outletID')
   useEffect(() => {
-    router.push(`/admin/inventory/${outletID}`);
+    if(outletID) router.push(`/admin/inventory/${outletID}`);
   }, [])
 
   return (

@@ -21,12 +21,17 @@ import Cookies from "js-cookie";
 import router from "next/router";
 
 function AdminNavbar({ brandText }) {
+  const username = Cookies.get('username');
+  const gender = Cookies.get('employeeGender');
+  const image = gender === 'Female' ? '4' : '1';
+
   const logoutHandler = (e) => {
     e.preventDefault();
     Cookies.remove('username');
     Cookies.remove('outletID');
     Cookies.remove('role');
-    if(Cookies.get('employee')) Cookies.remove('employeeID');
+    if(Cookies.get('employeeID')) Cookies.remove('employeeID');
+    if(Cookies.get('employeeGender')) Cookies.remove('employeeGender');
     router.push('/auth/login');
   }
 
@@ -58,12 +63,12 @@ function AdminNavbar({ brandText }) {
                   <span className="avatar avatar-sm rounded-circle">
                     <img
                       alt="..."
-                      src={require("assets/img/theme/team-1-800x800.jpg")}
+                      src={require(`assets/img/theme/team-${image}-800x800.jpg`)}
                     />
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Adi Adnyana
+                      {username}
                     </span>
                   </Media>
                 </Media>

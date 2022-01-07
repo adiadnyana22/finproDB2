@@ -20,12 +20,13 @@ import UserHeader from "components/Headers/UserHeader.js";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ params }) {
+  const { outletId } = params;
   const queryCustomer = await fetch(`http://localhost:3000/api/customer`);
   const customers = await queryCustomer.json();
   const queryPayment = await fetch(`http://localhost:3000/api/payment`);
   const payments = await queryPayment.json();
-  const queryProduct = await fetch(`http://localhost:3000/api/product`);
+  const queryProduct = await fetch(`http://localhost:3000/api/order/getSelect/${outletId}`);
   const products = await queryProduct.json();
   return {
     props: {
@@ -44,7 +45,7 @@ function AddOrder({ customers, payments, products }) {
   const [order, setOrder] = useState([
     {
       productID: products[0].productID,
-      quantity: 1
+      quantity: 0
     }
   ]);
   const [payment, setPayment] = useState(payments[0].paymentID);
@@ -54,7 +55,7 @@ function AddOrder({ customers, payments, products }) {
     const totalPrice = order.reduce((prevVal, curEl) => {
       const product = products.filter((el) => el.productID == curEl.productID);
 
-      return prevVal + (product[0].productPrice * curEl.quantity);
+      return prevVal + (parseFloat(product[0].productPrice) * parseInt(curEl.quantity));
     }, 0)
     const list = {
         outletID,
@@ -80,7 +81,7 @@ function AddOrder({ customers, payments, products }) {
     const values = [...order];
     values.push({
       productID: products[0].productID,
-      quantity: 1
+      quantity: 0
     });
     setOrder(values);
   };
@@ -89,7 +90,7 @@ function AddOrder({ customers, payments, products }) {
     let values = [...order];
     if(values.length === 1) values = [{
       productID: products[0].productID,
-      quantity: 1
+      quantity: 0
     }];
     else values.splice(index, 1);
     setOrder(values);
@@ -105,6 +106,14 @@ function AddOrder({ customers, payments, products }) {
 
     setOrder(values);
   };
+
+  const getQuantity = (index) => {
+    const element = products.find((el) => {
+      return el.productID == order[index].productID
+    })
+
+    return element.quantity;
+  }
 
   return (
     <>
@@ -217,6 +226,8 @@ function AddOrder({ customers, payments, products }) {
                               type="number"
                               name="quantity"
                               value={odr.quantity}
+                              max={ getQuantity(index) }
+                              min={0}
                               onChange={e => { handleInputChange(index, e) }}
                               required
                             />
