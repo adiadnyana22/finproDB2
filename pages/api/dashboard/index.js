@@ -4,6 +4,7 @@ import sqlConfig from '../../../variables/database';
 export default async (req, res) => {
     if(req.method === 'GET'){
         const data = {};
+        data.outletSummary = {};
 
         try {
             // make sure that any items are correctly URL encoded in the connection string
@@ -19,6 +20,12 @@ export default async (req, res) => {
             data.employee = temp.recordset[0].Employee;
             temp = await sql.query`SELECT orderDate, totalPrice FROM [Order]`;
             data.orderDetail = temp.recordset;
+            temp = await sql.query`SELECT * FROM SalesAndOrder`;
+            data.outletSummary.salesAndOrder = temp.recordset;
+            temp = await sql.query`SELECT * FROM ProductSold`;
+            data.outletSummary.productSold = temp.recordset;
+            temp = await sql.query`SELECT * FROM EmployeeCount`;
+            data.outletSummary.employeeCount = temp.recordset;
         } catch (err) {
             console.log(err)
         }

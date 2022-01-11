@@ -41,15 +41,26 @@ import { useRouter } from "next/router";
 export async function getServerSideProps() {
   const res = await fetch(`http://localhost:3000/api/dashboard`)
   const dashboard = await res.json()
+  const outletSummary = dashboard.outletSummary.salesAndOrder.map((element, index) => {
+    const productSold = dashboard.outletSummary.productSold[index].ProductSold;
+    const employeeCount = dashboard.outletSummary.employeeCount[index].EmployeeCount;
+
+    return {
+      ...element,
+      productSold,
+      employeeCount
+    }
+  })
 
   return {
     props: {
-      dashboard
+      dashboard,
+      outletSummary
     },
   };
 }
 
-const Dashboard = ({ dashboard }) => {
+const Dashboard = ({ dashboard, outletSummary }) => {
   const router = useRouter();
   const outletID = Cookies.get('outletID');
   const [activeNav, setActiveNav] = React.useState(1);
@@ -169,72 +180,35 @@ const Dashboard = ({ dashboard }) => {
             </Card>
           </Col>
         </Row>
-        {/* <Row className="mt-5">
+        <Row className="mt-5">
           <Col className="mb-5 mb-xl-0" xl="12">
             <Card className="shadow">
               <CardHeader className="border-0">
                 <Row className="align-items-center">
                   <div className="col">
-                    <h3 className="mb-0">Customer table</h3>
-                  </div>
-                  <div className="col text-right">
-                    <Button
-                      color="primary"
-                      href="#pablo"
-                      onClick={(e) => e.preventDefault()}
-                      size="sm"
-                    >
-                      Add Customer
-                    </Button>
+                    <h3 className="mb-0">Outlet Summary</h3>
                   </div>
                 </Row>
               </CardHeader>
               <Table className="align-items-center table-flush" responsive>
                 <thead className="thead-light">
                   <tr>
-                    <th scope="col">Customer Name</th>
-                    <th scope="col">Customer Phone</th>
-                    <th scope="col">Customer Address</th>
-                    <th scope="col">Customer Gender</th>
-                    <th scope="col">Action</th>
+                    <th scope="col">Outlet Name</th>
+                    <th scope="col">Number of Employee</th>
+                    <th scope="col">Number of Order</th>
+                    <th scope="col">Product Sold</th>
+                    <th scope="col">Sales</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {customers.map((customer) => {
+                  {outletSummary.map((outlet, index) => {
                     return (
-                      <tr key={customer.customerID}>
-                        <th scope="row">{customer.customerName}</th>
-                        <td>{customer.customerPhone}</td>
-                        <td>{customer.customerAddress}</td>
-                        <td>{customer.customerGender}</td>
-                        <td className="">
-                          <UncontrolledDropdown>
-                            <DropdownToggle
-                              className="btn-icon-only text-light"
-                              href="#pablo"
-                              role="button"
-                              size="sm"
-                              color=""
-                              onClick={(e) => e.preventDefault()}
-                            >
-                              <i className="fas fa-ellipsis-v" />
-                            </DropdownToggle>
-                            <DropdownMenu className="dropdown-menu-arrow" right>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Update
-                              </DropdownItem>
-                              <DropdownItem
-                                href="#pablo"
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                Delete
-                              </DropdownItem>
-                            </DropdownMenu>
-                          </UncontrolledDropdown>
-                        </td>
+                      <tr key={index}>
+                        <th scope="row">{outlet.outletName}</th>
+                        <td>{outlet.employeeCount}</td>
+                        <td>{outlet.Order}</td>
+                        <td>{outlet.productSold}</td>
+                        <td>{`Rp. ${outlet.Sales / 1000}k`}</td>
                       </tr>
                     )
                   })}
@@ -242,7 +216,7 @@ const Dashboard = ({ dashboard }) => {
               </Table>
             </Card>
           </Col>
-        </Row> */}
+        </Row>
       </Container>
     </>
   );
